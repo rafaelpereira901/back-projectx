@@ -18,7 +18,9 @@ Accept: application/json
     "isbn": "978-0-123456-47-2",
     "title": "Clean Architecture",
     "description": "A guide to software architecture and design.",
-    "author": "Robert C. Martin",
+    "author": {
+        "id": 1
+    },
     "genres": [
         "Software Engineering",
         "Architecture"
@@ -35,7 +37,9 @@ Accept: application/json
     "isbn": "978-1-234567-89-7",
     "title": "Clean Code (Updated)",
     "description": "Updated edition with additional examples.",
-    "author": "Robert C. Martin",
+    "author": {
+        "id": 1
+    },
     "genres": [
         "Software Engineering",
         "Best Practices"

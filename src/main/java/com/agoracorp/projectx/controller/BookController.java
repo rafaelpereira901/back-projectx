@@ -2,6 +2,8 @@ package com.agoracorp.projectx.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,12 +39,12 @@ public class BookController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Book> createBook(@RequestBody Book book){
+	public ResponseEntity<Book> createBook(@Valid @RequestBody Book book){
 		return new ResponseEntity<>(bookService.createBook(book), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book){
+	public ResponseEntity<Book> updateBook(@PathVariable Long id, @Valid @RequestBody Book book){
 		return new ResponseEntity<>(bookService.updateBook(id, book), HttpStatus.OK);
 	}
 
