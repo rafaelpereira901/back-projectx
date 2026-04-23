@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:8080
+@userId = 1
+@token = paste-jwt-token-here
+
+### Get profile by user id (public)
+GET {{baseUrl}}/profile/{{userId}}
+Accept: application/json
+
+### Update my profile (must match token user id)
+PUT {{baseUrl}}/profile/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fullName": "John Doe",
+  "bio": "Software engineer"
+}
+
+### Delete my profile (must match token user id)
+DELETE {{baseUrl}}/profile/{{userId}}
+Authorization: Bearer {{token}}
+Accept: application/json
