@@ -40,6 +40,5 @@ logs/
 *.properties
 *.env
 *.db
-projectxdb.mv.db
 
 *.txt
