@@ -61,7 +61,6 @@ public class UserProfileService {
 	}
 
 	private ProfileResponse toResponse(UserProfile profile) {
-		return new ProfileResponse(profile.getId(), profile.getUser().getId(), profile.getUser().getEmail(),
-				profile.getFullName(), profile.getBio());
+		return new ProfileResponse(profile.getId(), profile.getFullName(), profile.getBio());
 	}
 }

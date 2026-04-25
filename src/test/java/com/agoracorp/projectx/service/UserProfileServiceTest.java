@@ -48,7 +48,7 @@ class UserProfileServiceTest {
 		ProfileResponse response = userProfileService.getProfileByUserId(1L);
 
 		assertEquals(5L, response.id());
-		assertEquals("user@mail.com", response.email());
+		assertEquals("Name", response.fullName());
 	}
 
 	@Test
