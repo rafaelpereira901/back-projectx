@@ -19,7 +19,8 @@ public class JwtService {
 	private final SecretKey secretKey;
 	private final long expirationMinutes;
 
-	public JwtService(@Value("${app.security.jwt.secret}") String secret,
+	public JwtService(
+			@Value("${app.security.jwt.secret:replace-this-with-a-very-long-random-secret-key-at-least-32-bytes}") String secret,
 			@Value("${app.security.jwt.expiration-minutes:60}") long expirationMinutes) {
 		byte[] secretBytes = secret.getBytes(StandardCharsets.UTF_8);
 		if (secretBytes.length < 32) {
