@@ -35,6 +35,6 @@ build/
 ### Properties ###
 *.properties
 *.env
-
+*.db
 
 *.txt
