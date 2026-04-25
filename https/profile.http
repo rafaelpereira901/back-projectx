@@ -1,6 +1,6 @@
 @baseUrl = http://localhost:8080
 @userId = 1
-@token = paste-jwt-token-here
+@token = eynJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG1haWwuY29tIiwidWlkIjoxLCJpYXQiOjE3NzcxMzg5MTksImV4cCI6MTc3NzE0MjUxOX0.gGmq-1U_F-HCqvRubyr_ko9EkWemp1-N5x2NH9NEQOg
 
 ### Get profile by user id (public)
 GET {{baseUrl}}/profile/{{userId}}

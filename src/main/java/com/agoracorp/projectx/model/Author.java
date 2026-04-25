@@ -3,10 +3,11 @@ package com.agoracorp.projectx.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -40,8 +41,8 @@ public class Author {
 	@Size(max = 1000, message = "Author description must have at most 1000 characters")
 	private String description;
 
-	@OneToMany(mappedBy = "author")
-	@JsonManagedReference
+	@OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+	@JsonIgnoreProperties("author")
 	private List<Book> books = new ArrayList<>();
 
 }
