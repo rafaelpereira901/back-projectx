@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:8080
+@authorId = 1
+
+### Get all authors
+GET {{baseUrl}}/authors
+Accept: application/json
+
+### Get author by id
+GET {{baseUrl}}/authors/{{authorId}}
+Accept: application/json
+
+### Create author
+POST {{baseUrl}}/authors
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "RobertMartin",
+  "description": "Author of software engineering and clean code books."
+}
+
+### Update author
+PUT {{baseUrl}}/authors/{{authorId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "RobertMartin",
+  "description": "Updated bio for Robert C. Martin."
+}
+
+### Delete author
+DELETE {{baseUrl}}/authors/{{authorId}}
+Accept: application/json

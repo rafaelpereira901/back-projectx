@@ -1,0 +1,23 @@
+@baseUrl = http://localhost:8080
+@userId = 1
+@token = eynJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQG1haWwuY29tIiwidWlkIjoxLCJpYXQiOjE3NzcxMzg5MTksImV4cCI6MTc3NzE0MjUxOX0.gGmq-1U_F-HCqvRubyr_ko9EkWemp1-N5x2NH9NEQOg
+
+### Get profile by user id (public)
+GET {{baseUrl}}/profile/{{userId}}
+Accept: application/json
+
+### Update my profile (must match token user id)
+PUT {{baseUrl}}/profile/{{userId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "fullName": "John Doe",
+  "bio": "Software engineer"
+}
+
+### Delete my profile (must match token user id)
+DELETE {{baseUrl}}/profile/{{userId}}
+Authorization: Bearer {{token}}
+Accept: application/json

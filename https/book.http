@@ -1,0 +1,52 @@
+@baseUrl = http://localhost:8080
+@bookId = 1
+
+### Get all books
+GET {{baseUrl}}/books
+Accept: application/json
+
+### Get book by id
+GET {{baseUrl}}/books/{{bookId}}
+Accept: application/json
+
+### Create book
+POST {{baseUrl}}/books
+Content-Type: application/json
+Accept: application/json
+
+{
+    "isbn": "978-0-123456-47-2",
+    "title": "Clean Architecture",
+    "description": "A guide to software architecture and design.",
+    "author": {
+        "id": 1
+    },
+    "genres": [
+        "Software Engineering",
+        "Architecture"
+    ],
+    "publishedDate": "2017-09-20"
+}
+
+### Update book (full update)
+PUT {{baseUrl}}/books/{{bookId}}
+Content-Type: application/json
+Accept: application/json
+
+{
+    "isbn": "978-1-234567-89-7",
+    "title": "Clean Code (Updated)",
+    "description": "Updated edition with additional examples.",
+    "author": {
+        "id": 1
+    },
+    "genres": [
+        "Software Engineering",
+        "Best Practices"
+    ],
+    "publishedDate": "2020-01-15"
+}
+
+### Delete book
+DELETE {{baseUrl}}/books/{{bookId}}
+Accept: application/json

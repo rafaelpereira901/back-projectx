@@ -32,8 +32,13 @@ build/
 ### VS Code ###
 .vscode/
 
+### Logs ###
+logs/
+*.log
+
 ### Properties ###
 *.properties
 *.env
+*.db
 
-
+*.txt
