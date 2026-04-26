@@ -11,6 +11,7 @@ Accept: application/json
 
 ### Create book
 POST {{baseUrl}}/books
+Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -30,6 +31,7 @@ Accept: application/json
 
 ### Update book (full update)
 PUT {{baseUrl}}/books/{{bookId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -49,4 +51,5 @@ Accept: application/json
 
 ### Delete book
 DELETE {{baseUrl}}/books/{{bookId}}
+Authorization: Bearer {{token}}
 Accept: application/json

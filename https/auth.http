@@ -1,4 +1,6 @@
 @baseUrl = http://localhost:8080
+@email = user@mail.com
+@password = Password123
 
 ### Signup
 POST {{baseUrl}}/auth/signup
@@ -6,8 +8,8 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "user@mail.com",
-  "password": "Password123"
+  "email": "{{email}}",
+  "password": "{{password}}"
 }
 
 ### Login
@@ -16,6 +18,11 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "email": "user@mail.com",
-  "password": "Password123"
+  "email": "{{email}}",
+  "password": "{{password}}"
 }
+
+> {%
+client.global.set("token", response.body.token);
+client.global.set("userId", String(response.body.userId));
+%}

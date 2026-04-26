@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:8080
+@baseUrl = https://api.gigiboia.com
 @authorId = 1
 
 ### Get all authors
@@ -11,16 +11,18 @@ Accept: application/json
 
 ### Create author
 POST {{baseUrl}}/authors
+Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept: application/json
 
 {
-  "name": "RobertMartin",
+  "name": "Robert Martin",
   "description": "Author of software engineering and clean code books."
 }
 
 ### Update author
 PUT {{baseUrl}}/authors/{{authorId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept: application/json
 
@@ -31,4 +33,5 @@ Accept: application/json
 
 ### Delete author
 DELETE {{baseUrl}}/authors/{{authorId}}
+Authorization: Bearer {{token}}
 Accept: application/json
