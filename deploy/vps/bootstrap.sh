@@ -37,6 +37,10 @@ chown -R "${APP_USER}:${APP_USER}" /var/log/${APP_NAME}
 if [[ ! -f "${ENV_FILE}" ]]; then
   cat > "${ENV_FILE}" <<'EOF'
 SPRING_PROFILES_ACTIVE=prod
+SPRING_DATASOURCE_URL=jdbc:postgresql://127.0.0.1:5432/projectx
+SPRING_DATASOURCE_USERNAME=projectx
+SPRING_DATASOURCE_PASSWORD=change-me
+SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
 APP_JWT_SECRET=replace-this-with-a-very-long-random-secret-key-at-least-32-bytes
 APP_JWT_EXPIRATION_MINUTES=60
 APP_SECURITY_CORS_ALLOWED_ORIGIN_PATTERNS=https://your-domain.com
@@ -76,5 +80,5 @@ systemctl enable ${APP_NAME}
 
 echo "Bootstrap complete."
 echo "Next steps:"
-echo "1) Edit ${ENV_FILE} with real values (especially APP_JWT_SECRET)."
+echo "1) Edit ${ENV_FILE} with real values (especially datasource and APP_JWT_SECRET)."
 echo "2) Commit and push to main; GitHub Actions will deploy and restart ${APP_NAME}."
