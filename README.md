@@ -91,6 +91,10 @@ No base `application.properties` is used. Choose a profile explicitly (`dev` or 
 ### Important Environment Variables
 
 - `SPRING_PROFILES_ACTIVE`: `dev` or `prod`
+- `SPRING_DATASOURCE_URL`: required in `prod` profile
+- `SPRING_DATASOURCE_USERNAME`: required in `prod` profile
+- `SPRING_DATASOURCE_PASSWORD`: required in `prod` profile
+- `SPRING_DATASOURCE_DRIVER_CLASS_NAME`: defaults to `org.postgresql.Driver`
 - `APP_JWT_SECRET`: JWT signing secret
 - `APP_JWT_EXPIRATION_MINUTES`: token expiration (default `60`)
 - `APP_SECURITY_CORS_ALLOWED_ORIGIN_PATTERNS`: CORS origin patterns
@@ -99,9 +103,10 @@ No base `application.properties` is used. Choose a profile explicitly (`dev` or 
 
 ## Database
 
-Dev and prod currently use H2 file database URL:
+Database profile behavior:
 
-- `jdbc:h2:file:./data/projectxdb;MODE=PostgreSQL;`
+- Dev profile: H2 file database (`jdbc:h2:file:./data/projectxdb;MODE=PostgreSQL;`)
+- Prod profile: datasource is provided by environment variables (`SPRING_DATASOURCE_*`), intended for PostgreSQL
 
 Local DB file is created under `data/`.
 
@@ -218,7 +223,9 @@ Current suite includes service, controller, model validation, JWT, and context-l
 
 ## Git Notes
 
-- `*.properties` is ignored in `.gitignore`.
+- `*.properties` is ignored in `.gitignore`, except:
+- `src/main/resources/application-dev.properties`
+- `src/main/resources/application-prod.properties`
 - Local DB and logs are ignored.
 - If a previously tracked file keeps appearing in changes, remove it from index once:
 
@@ -230,8 +237,9 @@ git rm --cached <file>
 
 1. Install JDK 21 and Maven.
 2. Set `SPRING_PROFILES_ACTIVE` and `APP_JWT_SECRET`.
-3. Start app with `mvn spring-boot:run` or VS Code launch profile.
-4. Verify `GET /actuator/health`.
-5. Use `https/auth.http` to create/login user.
-6. Use returned token for write endpoints.
-7. Run `mvn test` before opening PRs.
+3. For `prod`, set `SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, and `SPRING_DATASOURCE_PASSWORD`.
+4. Start app with `mvn spring-boot:run` or VS Code launch profile.
+5. Verify `GET /actuator/health`.
+6. Use `https/auth.http` to create/login user.
+7. Use returned token for write endpoints.
+8. Run `mvn test` before opening PRs.
