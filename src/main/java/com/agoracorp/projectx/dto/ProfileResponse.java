@@ -1,4 +1,4 @@
 package com.agoracorp.projectx.dto;
 
-public record ProfileResponse(Long id, String fullName, String bio) {
+public record ProfileResponse(Long userId, String fullName, String bio) {
 }
