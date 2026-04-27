@@ -27,7 +27,7 @@ public class UserProfileService {
 	@Transactional(readOnly = true)
 	public ProfileResponse getProfileByUserId(Long userId) {
 		UserProfile profile = getProfileByUserIdOrThrow(userId);
-		return toResponse(profile);
+		return toResponse(profile, userId);
 	}
 
 	@Transactional
@@ -36,7 +36,7 @@ public class UserProfileService {
 		UserProfile profile = getProfileByUserIdOrThrow(userId);
 		profile.setFullName(request.fullName());
 		profile.setBio(request.bio());
-		return toResponse(userProfileRepository.save(profile));
+		return toResponse(userProfileRepository.save(profile), userId);
 	}
 
 	@Transactional
@@ -60,7 +60,7 @@ public class UserProfileService {
 		}
 	}
 
-	private ProfileResponse toResponse(UserProfile profile) {
-		return new ProfileResponse(profile.getId(), profile.getFullName(), profile.getBio());
+	private ProfileResponse toResponse(UserProfile profile, Long userId) {
+		return new ProfileResponse(profile.getId(), userId, profile.getFullName(), profile.getBio());
 	}
 }
