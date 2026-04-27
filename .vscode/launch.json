@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run Projectx (dev)",
+      "request": "launch",
+      "mainClass": "com.agoracorp.projectx.ProjectxApplication",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "SPRING_PROFILES_ACTIVE": "dev",
+        "APP_JWT_SECRET": "replace-this-with-a-very-long-random-secret-key-at-least-32-bytes"
+      }
+    },
+    {
+      "type": "java",
+      "name": "Run Projectx (prod)",
+      "request": "launch",
+      "mainClass": "com.agoracorp.projectx.ProjectxApplication",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "SPRING_PROFILES_ACTIVE": "prod",
+        "APP_JWT_SECRET": "replace-this-with-a-very-long-random-secret-key-at-least-32-bytes"
+      }
+    }
+  ]
+}
