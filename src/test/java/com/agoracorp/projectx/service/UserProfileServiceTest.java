@@ -47,7 +47,6 @@ class UserProfileServiceTest {
 
 		ProfileResponse response = userProfileService.getProfileByUserId(1L);
 
-		assertEquals(5L, response.id());
 		assertEquals(1L, response.userId());
 		assertEquals("Name", response.fullName());
 	}

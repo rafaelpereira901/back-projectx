@@ -33,7 +33,7 @@ class UserProfileControllerTest {
 
 	@Test
 	void getProfileByUserId_shouldReturnOk() {
-		ProfileResponse profileResponse = new ProfileResponse(1L, 2L, "John", "Bio");
+		ProfileResponse profileResponse = new ProfileResponse(2L, "John", "Bio");
 		when(userProfileService.getProfileByUserId(2L)).thenReturn(profileResponse);
 
 		ResponseEntity<ProfileResponse> response = userProfileController.getProfileByUserId(2L);
@@ -46,7 +46,7 @@ class UserProfileControllerTest {
 	void updateProfileByUserId_shouldReturnOk() {
 		UserPrincipal principal = buildPrincipal();
 		ProfileUpdateRequest request = new ProfileUpdateRequest("Jane", "New bio");
-		ProfileResponse profileResponse = new ProfileResponse(1L, 2L, "Jane", "New bio");
+		ProfileResponse profileResponse = new ProfileResponse(2L, "Jane", "New bio");
 		when(userProfileService.updateProfileByUserId(2L, principal, request)).thenReturn(profileResponse);
 
 		ResponseEntity<ProfileResponse> response = userProfileController.updateProfileByUserId(2L, principal, request);
