@@ -32,37 +32,37 @@ class UserProfileControllerTest {
 	}
 
 	@Test
-	void getProfileByUserId_shouldReturnOk() {
+	void getProfileById_shouldReturnOk() {
 		ProfileResponse profileResponse = new ProfileResponse(1L, "John", "Bio");
-		when(userProfileService.getProfileByUserId(2L)).thenReturn(profileResponse);
+		when(userProfileService.getProfileById(2L)).thenReturn(profileResponse);
 
-		ResponseEntity<ProfileResponse> response = userProfileController.getProfileByUserId(2L);
+		ResponseEntity<ProfileResponse> response = userProfileController.getProfileById(2L);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("John", response.getBody().fullName());
 	}
 
 	@Test
-	void updateProfileByUserId_shouldReturnOk() {
+	void updateProfileById_shouldReturnOk() {
 		UserPrincipal principal = buildPrincipal();
 		ProfileUpdateRequest request = new ProfileUpdateRequest("Jane", "New bio");
 		ProfileResponse profileResponse = new ProfileResponse(1L, "Jane", "New bio");
-		when(userProfileService.updateProfileByUserId(2L, principal, request)).thenReturn(profileResponse);
+		when(userProfileService.updateProfileById(2L, principal, request)).thenReturn(profileResponse);
 
-		ResponseEntity<ProfileResponse> response = userProfileController.updateProfileByUserId(2L, principal, request);
+		ResponseEntity<ProfileResponse> response = userProfileController.updateProfileById(2L, principal, request);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("Jane", response.getBody().fullName());
 	}
 
 	@Test
-	void deleteProfileByUserId_shouldReturnNoContent() {
+	void deleteProfileById_shouldReturnNoContent() {
 		UserPrincipal principal = buildPrincipal();
 
-		ResponseEntity<Void> response = userProfileController.deleteProfileByUserId(2L, principal);
+		ResponseEntity<Void> response = userProfileController.deleteProfileById(2L, principal);
 
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-		verify(userProfileService).deleteProfileByUserId(2L, principal);
+		verify(userProfileService).deleteProfileById(2L, principal);
 	}
 
 	private UserPrincipal buildPrincipal() {

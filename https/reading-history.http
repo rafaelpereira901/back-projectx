@@ -1,0 +1,21 @@
+@baseUrl = http://localhost:8080
+@profileId = 1
+@bookId = 1
+
+### Create reading history entry (owner only)
+POST {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/reading-histories
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "comment": "Reached chapter 3, the pacing improved a lot."
+}
+
+### Get all reading histories by profile (public)
+GET {{baseUrl}}/profiles/{{profileId}}/reading-histories
+Accept: application/json
+
+### Get reading histories by profile and book (public)
+GET {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/reading-histories
+Accept: application/json

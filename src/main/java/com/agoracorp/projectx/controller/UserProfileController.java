@@ -19,7 +19,7 @@ import com.agoracorp.projectx.service.UserProfileService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/profile")
+@RequestMapping("/profiles")
 public class UserProfileController {
 
 	private final UserProfileService userProfileService;
@@ -28,22 +28,22 @@ public class UserProfileController {
 		this.userProfileService = userProfileService;
 	}
 
-	@GetMapping("/{userId}")
-	public ResponseEntity<ProfileResponse> getProfileByUserId(@PathVariable Long userId) {
-		return new ResponseEntity<>(userProfileService.getProfileByUserId(userId), HttpStatus.OK);
+	@GetMapping("/{profileId}")
+	public ResponseEntity<ProfileResponse> getProfileById(@PathVariable Long profileId) {
+		return new ResponseEntity<>(userProfileService.getProfileById(profileId), HttpStatus.OK);
 	}
 
-	@PutMapping("/{userId}")
-	public ResponseEntity<ProfileResponse> updateProfileByUserId(@PathVariable Long userId,
+	@PutMapping("/{profileId}")
+	public ResponseEntity<ProfileResponse> updateProfileById(@PathVariable Long profileId,
 			@AuthenticationPrincipal UserPrincipal principal,
 			@Valid @RequestBody ProfileUpdateRequest request) {
-		return new ResponseEntity<>(userProfileService.updateProfileByUserId(userId, principal, request), HttpStatus.OK);
+		return new ResponseEntity<>(userProfileService.updateProfileById(profileId, principal, request), HttpStatus.OK);
 	}
 
-	@DeleteMapping("/{userId}")
-	public ResponseEntity<Void> deleteProfileByUserId(@PathVariable Long userId,
+	@DeleteMapping("/{profileId}")
+	public ResponseEntity<Void> deleteProfileById(@PathVariable Long profileId,
 			@AuthenticationPrincipal UserPrincipal principal) {
-		userProfileService.deleteProfileByUserId(userId, principal);
+		userProfileService.deleteProfileById(profileId, principal);
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 	}
 }

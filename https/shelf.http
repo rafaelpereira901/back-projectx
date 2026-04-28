@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:8080
+@profileId = 1
+@bookId = 1
+@status = READING
+
+### Upsert shelf relation for a book (owner only)
+PUT {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/shelf
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "status": "{{status}}"
+}
+
+### Delete shelf relation for a book (owner only)
+DELETE {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/shelf
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get books by profile and shelf status (public)
+GET {{baseUrl}}/profiles/{{profileId}}/shelves/{{status}}/books
+Accept: application/json
+
+### Get shelf relation by profile and book (public)
+GET {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/shelf
+Accept: application/json
+
+### Allowed shelf status values
+# WANT_TO_READ
+# READING
+# READ
+# NOT_FINISHED

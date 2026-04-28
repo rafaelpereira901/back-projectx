@@ -1,12 +1,12 @@
 @baseUrl = http://localhost:8080
-@userId = 1
+@profileId = 1
 
-### Get profile by user id (public)
-GET {{baseUrl}}/profile/{{userId}}
+### Get profile by profile id (public)
+GET {{baseUrl}}/profiles/{{profileId}}
 Accept: application/json
 
-### Update my profile (must match token user id)
-PUT {{baseUrl}}/profile/{{userId}}
+### Update my profile (must match token owner profile)
+PUT {{baseUrl}}/profiles/{{profileId}}
 Authorization: Bearer {{token}}
 Content-Type: application/json
 Accept: application/json
@@ -16,7 +16,7 @@ Accept: application/json
   "bio": "Software engineer"
 }
 
-### Delete my profile (must match token user id)
-DELETE {{baseUrl}}/profile/{{userId}}
+### Delete my profile (must match token owner profile)
+DELETE {{baseUrl}}/profiles/{{profileId}}
 Authorization: Bearer {{token}}
 Accept: application/json

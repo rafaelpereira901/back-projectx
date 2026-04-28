@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +17,6 @@ import com.agoracorp.projectx.dto.ProfileResponse;
 import com.agoracorp.projectx.dto.ProfileUpdateRequest;
 import com.agoracorp.projectx.model.UserAccount;
 import com.agoracorp.projectx.model.UserProfile;
-import com.agoracorp.projectx.repository.UserAccountRepository;
 import com.agoracorp.projectx.repository.UserProfileRepository;
 import com.agoracorp.projectx.security.UserPrincipal;
 
@@ -27,40 +24,38 @@ import com.agoracorp.projectx.security.UserPrincipal;
 class UserProfileServiceTest {
 
 	@Mock
-	private UserAccountRepository userAccountRepository;
-	@Mock
 	private UserProfileRepository userProfileRepository;
+	@Mock
+	private ProfileAccessService profileAccessService;
 
 	private UserProfileService userProfileService;
 
 	@BeforeEach
 	void setUp() {
-		userProfileService = new UserProfileService(userAccountRepository, userProfileRepository);
+		userProfileService = new UserProfileService(userProfileRepository, profileAccessService);
 	}
 
 	@Test
-	void getProfileByUserId_shouldReturnProfile() {
+	void getProfileById_shouldReturnProfile() {
 		UserAccount user = buildUser();
 		UserProfile profile = buildProfile(user);
-		when(userAccountRepository.findById(1L)).thenReturn(Optional.of(user));
-		when(userProfileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+		when(profileAccessService.getProfileOrThrow(5L)).thenReturn(profile);
 
-		ProfileResponse response = userProfileService.getProfileByUserId(1L);
+		ProfileResponse response = userProfileService.getProfileById(5L);
 
 		assertEquals(5L, response.id());
 		assertEquals("Name", response.fullName());
 	}
 
 	@Test
-	void updateProfileByUserId_shouldPersistChanges_whenOwner() {
+	void updateProfileById_shouldPersistChanges_whenOwner() {
 		UserAccount user = buildUser();
 		UserProfile profile = buildProfile(user);
 		UserPrincipal principal = new UserPrincipal(user);
-		when(userAccountRepository.findById(1L)).thenReturn(Optional.of(user));
-		when(userProfileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+		when(profileAccessService.assertOwnerProfile(5L, principal)).thenReturn(profile);
 		when(userProfileRepository.save(profile)).thenReturn(profile);
 
-		ProfileResponse response = userProfileService.updateProfileByUserId(1L, principal,
+		ProfileResponse response = userProfileService.updateProfileById(5L, principal,
 				new ProfileUpdateRequest("New Name", "New bio"));
 
 		assertEquals("New Name", response.fullName());
@@ -68,40 +63,41 @@ class UserProfileServiceTest {
 	}
 
 	@Test
-	void deleteProfileByUserId_shouldDeleteProfile_whenOwner() {
+	void deleteProfileById_shouldDeleteProfile_whenOwner() {
 		UserAccount user = buildUser();
 		UserProfile profile = buildProfile(user);
 		UserPrincipal principal = new UserPrincipal(user);
-		when(userAccountRepository.findById(1L)).thenReturn(Optional.of(user));
-		when(userProfileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
+		when(profileAccessService.assertOwnerProfile(5L, principal)).thenReturn(profile);
 
-		userProfileService.deleteProfileByUserId(1L, principal);
+		userProfileService.deleteProfileById(5L, principal);
 
 		verify(userProfileRepository).delete(profile);
 	}
 
 	@Test
-	void getProfileByUserId_shouldThrowNotFound_whenProfileMissing() {
-		UserAccount user = buildUser();
-		when(userAccountRepository.findById(1L)).thenReturn(Optional.of(user));
-		when(userProfileRepository.findByUserId(1L)).thenReturn(Optional.empty());
+	void getProfileById_shouldThrowNotFound_whenProfileMissing() {
+		ResponseStatusException notFound = new ResponseStatusException(HttpStatus.NOT_FOUND, "Profile not found");
+		when(profileAccessService.getProfileOrThrow(99L)).thenThrow(notFound);
 
 		ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-				() -> userProfileService.getProfileByUserId(1L));
+				() -> userProfileService.getProfileById(99L));
 
 		assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
 	}
 
 	@Test
-	void updateProfileByUserId_shouldThrowForbidden_whenNotOwner() {
+	void updateProfileById_shouldThrowForbidden_whenNotOwner() {
 		UserAccount other = new UserAccount();
 		other.setId(2L);
 		other.setEmail("other@mail.com");
 		other.setPassword("encoded");
 		UserPrincipal principal = new UserPrincipal(other);
+		ResponseStatusException forbidden = new ResponseStatusException(HttpStatus.FORBIDDEN,
+				"You can only modify your own content");
+		when(profileAccessService.assertOwnerProfile(5L, principal)).thenThrow(forbidden);
 
 		ResponseStatusException exception = assertThrows(ResponseStatusException.class,
-				() -> userProfileService.updateProfileByUserId(1L, principal,
+				() -> userProfileService.updateProfileById(5L, principal,
 						new ProfileUpdateRequest("New Name", "New bio")));
 
 		assertEquals(HttpStatus.FORBIDDEN, exception.getStatusCode());

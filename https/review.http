@@ -1,0 +1,31 @@
+@baseUrl = http://localhost:8080
+@profileId = 1
+@bookId = 1
+
+### Upsert review for a book (owner only)
+PUT {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/review
+Authorization: Bearer {{token}}
+Content-Type: application/json
+Accept: application/json
+
+{
+  "comment": "Excellent ending and very strong character development.",
+  "rating": 5
+}
+
+### Delete review for a book (owner only)
+DELETE {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/review
+Authorization: Bearer {{token}}
+Accept: application/json
+
+### Get all reviews by profile (public)
+GET {{baseUrl}}/profiles/{{profileId}}/reviews
+Accept: application/json
+
+### Get a profile review for a specific book (public)
+GET {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/review
+Accept: application/json
+
+### Get all reviews for a book (public)
+GET {{baseUrl}}/books/{{bookId}}/reviews
+Accept: application/json

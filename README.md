@@ -154,9 +154,9 @@ Authentication type:
 
 ### Profile
 
-- `GET /profile/{userId}` (public)
-- `PUT /profile/{userId}` (JWT required, owner-only in service)
-- `DELETE /profile/{userId}` (JWT required, owner-only in service)
+- `GET /profiles/{profileId}` (public)
+- `PUT /profiles/{profileId}` (JWT required, owner-only in service)
+- `DELETE /profiles/{profileId}` (JWT required, owner-only in service)
 
 ## Manual API Testing
 
@@ -166,6 +166,9 @@ Use the request files in `https/`:
 - `https/author.http`
 - `https/book.http`
 - `https/profile.http`
+- `https/reading-history.http`
+- `https/review.http`
+- `https/shelf.http`
 
 These can be executed from VS Code REST Client style workflows.
 
