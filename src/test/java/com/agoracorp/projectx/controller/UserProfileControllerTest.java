@@ -33,7 +33,7 @@ class UserProfileControllerTest {
 
 	@Test
 	void getProfileByUserId_shouldReturnOk() {
-		ProfileResponse profileResponse = new ProfileResponse(2L, "John", "Bio");
+		ProfileResponse profileResponse = new ProfileResponse(2L, "John", "Bio", null, null);
 		when(userProfileService.getProfileByUserId(2L)).thenReturn(profileResponse);
 
 		ResponseEntity<ProfileResponse> response = userProfileController.getProfileByUserId(2L);
@@ -46,7 +46,7 @@ class UserProfileControllerTest {
 	void updateProfileByUserId_shouldReturnOk() {
 		UserPrincipal principal = buildPrincipal();
 		ProfileUpdateRequest request = new ProfileUpdateRequest("Jane", "New bio");
-		ProfileResponse profileResponse = new ProfileResponse(2L, "Jane", "New bio");
+		ProfileResponse profileResponse = new ProfileResponse(2L, "Jane", "New bio", null, null);
 		when(userProfileService.updateProfileByUserId(2L, principal, request)).thenReturn(profileResponse);
 
 		ResponseEntity<ProfileResponse> response = userProfileController.updateProfileByUserId(2L, principal, request);
@@ -59,10 +59,10 @@ class UserProfileControllerTest {
 	void deleteProfileByUserId_shouldReturnNoContent() {
 		UserPrincipal principal = buildPrincipal();
 
-		ResponseEntity<Void> response = userProfileController.deleteProfileByUserId(2L, principal);
+		ResponseEntity<Void> response = userProfileController.deleteProfileByUserId(2L, principal, null);
 
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-		verify(userProfileService).deleteProfileByUserId(2L, principal);
+		verify(userProfileService).deleteProfileByUserId(2L, principal, null);
 	}
 
 	private UserPrincipal buildPrincipal() {
