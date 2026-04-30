@@ -9,6 +9,7 @@ Spring Boot backend for authentication, author/book catalog management, and user
 - CRUD for books
 - Public profile read, authenticated profile update/delete
 - Actuator endpoints for health and metrics
+- OpenAPI 3 documentation and Swagger UI
 - Split application logging (console + info file + error file)
 
 ## Tech Stack
@@ -158,6 +159,22 @@ Authentication type:
 - `PUT /profiles/{profileId}` (JWT required, owner-only in service)
 - `DELETE /profiles/{profileId}` (JWT required, owner-only in service)
 
+### Reading History
+
+- `POST /profiles/{profileId}/books/{bookId}/reading-histories` (JWT required, owner-only)
+- `GET /profiles/{profileId}/reading-histories` (public)
+- `GET /profiles/{profileId}/books/{bookId}/reading-histories` (public)
+- `GET /books/{bookId}/reading-histories` (public)
+- `GET /books/{bookId}/reading-histories/latest` (public)
+
+### Reviews
+
+- `PUT /profiles/{profileId}/books/{bookId}/review` (JWT required, owner-only)
+- `DELETE /profiles/{profileId}/books/{bookId}/review` (JWT required, owner-only)
+- `GET /profiles/{profileId}/reviews` (public)
+- `GET /profiles/{profileId}/books/{bookId}/review` (public)
+- `GET /books/{bookId}/reviews` (public)
+
 ## Manual API Testing
 
 Use the request files in `https/`:
@@ -171,6 +188,19 @@ Use the request files in `https/`:
 - `https/shelf.http`
 
 These can be executed from VS Code REST Client style workflows.
+
+## API Documentation (OpenAPI 3)
+
+Springdoc OpenAPI is enabled for this project.
+
+- Swagger UI: `/swagger-ui/index.html`
+- OpenAPI JSON: `/v3/api-docs`
+
+To authorize secured endpoints in Swagger UI:
+
+1. Click **Authorize**.
+2. Paste your JWT token in bearer format.
+3. Execute non-GET endpoints directly from the UI.
 
 ## Observability (Actuator)
 

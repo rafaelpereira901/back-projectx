@@ -67,7 +67,9 @@ class ReviewServiceTest {
 
 		assertEquals(1L, response.id());
 		assertEquals(profileId, response.profileId());
+		assertEquals("Test User", response.username());
 		assertEquals(bookId, response.bookId());
+		assertEquals("book", response.bookName());
 		assertEquals(5, response.rating());
 		assertEquals("great", response.comment());
 	}
@@ -102,6 +104,8 @@ class ReviewServiceTest {
 		assertEquals("new", captor.getValue().getComment());
 		assertEquals(4, captor.getValue().getRating());
 		assertEquals(90L, response.id());
+		assertEquals("Test User", response.username());
+		assertEquals("book", response.bookName());
 	}
 
 	@Test
@@ -123,6 +127,7 @@ class ReviewServiceTest {
 	private UserProfile profile(Long profileId, Long userId) {
 		UserProfile profile = new UserProfile();
 		profile.setId(profileId);
+		profile.setFullName("Test User");
 
 		UserAccount user = new UserAccount();
 		user.setId(userId);

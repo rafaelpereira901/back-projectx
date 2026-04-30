@@ -1,6 +1,7 @@
 package com.agoracorp.projectx.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.agoracorp.projectx.dto.ReadingHistoryCreateRequest;
 import com.agoracorp.projectx.dto.ReadingHistoryResponse;
@@ -65,6 +68,8 @@ class ReadingHistoryServiceTest {
 		assertEquals("chapter one notes", captor.getValue().getComment());
 		assertEquals(33L, response.id());
 		assertEquals(profileId, response.profileId());
+		assertEquals("Profile User", response.username());
+		assertEquals("book", response.bookName());
 	}
 
 	@Test
@@ -95,13 +100,88 @@ class ReadingHistoryServiceTest {
 		List<ReadingHistoryResponse> result = readingHistoryService.getByProfileAndBook(profileId, bookId);
 
 		assertEquals(2, result.size());
+		assertEquals("Profile User", result.get(0).username());
+		assertEquals("book", result.get(0).bookName());
 		assertEquals("start", result.get(0).comment());
+		assertEquals("Profile User", result.get(1).username());
+		assertEquals("book", result.get(1).bookName());
 		assertEquals("middle", result.get(1).comment());
+	}
+
+	@Test
+	void getByBook_shouldReturnEntriesOrderedByLatestFirst() {
+		Long bookId = 4L;
+		UserProfile firstProfile = profile(2L, 10L);
+		UserProfile secondProfile = profile(3L, 11L);
+		Book book = book(bookId);
+
+		ReadingHistory latest = new ReadingHistory();
+		latest.setId(8L);
+		latest.setUserProfile(secondProfile);
+		latest.setBook(book);
+		latest.setComment("latest note");
+		latest.setCreatedAt(Instant.parse("2026-04-23T00:00:00Z"));
+
+		ReadingHistory older = new ReadingHistory();
+		older.setId(7L);
+		older.setUserProfile(firstProfile);
+		older.setBook(book);
+		older.setComment("older note");
+		older.setCreatedAt(Instant.parse("2026-04-22T00:00:00Z"));
+
+		when(profileAccessService.getBookOrThrow(bookId)).thenReturn(book);
+		when(readingHistoryRepository.findByBookIdOrderByCreatedAtDesc(bookId)).thenReturn(List.of(latest, older));
+
+		List<ReadingHistoryResponse> result = readingHistoryService.getByBook(bookId);
+
+		assertEquals(2, result.size());
+		assertEquals("Profile User", result.get(0).username());
+		assertEquals("latest note", result.get(0).comment());
+		assertEquals("Profile User", result.get(1).username());
+		assertEquals("older note", result.get(1).comment());
+	}
+
+	@Test
+	void getLatestByBook_shouldReturnMostRecentEntry() {
+		Long bookId = 4L;
+		UserProfile profile = profile(2L, 10L);
+		Book book = book(bookId);
+
+		ReadingHistory latest = new ReadingHistory();
+		latest.setId(9L);
+		latest.setUserProfile(profile);
+		latest.setBook(book);
+		latest.setComment("latest note");
+		latest.setCreatedAt(Instant.parse("2026-04-24T00:00:00Z"));
+
+		when(profileAccessService.getBookOrThrow(bookId)).thenReturn(book);
+		when(readingHistoryRepository.findFirstByBookIdOrderByCreatedAtDesc(bookId)).thenReturn(java.util.Optional.of(latest));
+
+		ReadingHistoryResponse result = readingHistoryService.getLatestByBook(bookId);
+
+		assertEquals(9L, result.id());
+		assertEquals("Profile User", result.username());
+		assertEquals("latest note", result.comment());
+	}
+
+	@Test
+	void getLatestByBook_shouldReturnNotFoundWhenNoHistoryExists() {
+		Long bookId = 4L;
+		Book book = book(bookId);
+
+		when(profileAccessService.getBookOrThrow(bookId)).thenReturn(book);
+		when(readingHistoryRepository.findFirstByBookIdOrderByCreatedAtDesc(bookId)).thenReturn(java.util.Optional.empty());
+
+		ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+				() -> readingHistoryService.getLatestByBook(bookId));
+
+		assertEquals(HttpStatus.NOT_FOUND, ex.getStatusCode());
 	}
 
 	private UserProfile profile(Long profileId, Long userId) {
 		UserProfile profile = new UserProfile();
 		profile.setId(profileId);
+		profile.setFullName("Profile User");
 		UserAccount user = new UserAccount();
 		user.setId(userId);
 		user.setEmail("p@example.com");

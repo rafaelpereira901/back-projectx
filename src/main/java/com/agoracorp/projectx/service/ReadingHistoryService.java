@@ -2,8 +2,10 @@ package com.agoracorp.projectx.service;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.agoracorp.projectx.dto.ReadingHistoryCreateRequest;
 import com.agoracorp.projectx.dto.ReadingHistoryResponse;
@@ -57,11 +59,30 @@ public class ReadingHistoryService {
 				.toList();
 	}
 
+	@Transactional(readOnly = true)
+	public List<ReadingHistoryResponse> getByBook(Long bookId) {
+		profileAccessService.getBookOrThrow(bookId);
+		return readingHistoryRepository.findByBookIdOrderByCreatedAtDesc(bookId)
+				.stream()
+				.map(this::toResponse)
+				.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public ReadingHistoryResponse getLatestByBook(Long bookId) {
+		profileAccessService.getBookOrThrow(bookId);
+		ReadingHistory latestHistory = readingHistoryRepository.findFirstByBookIdOrderByCreatedAtDesc(bookId)
+				.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Reading history not found"));
+		return toResponse(latestHistory);
+	}
+
 	private ReadingHistoryResponse toResponse(ReadingHistory history) {
 		return new ReadingHistoryResponse(
 				history.getId(),
 				history.getUserProfile().getId(),
+				history.getUserProfile().getFullName(),
 				history.getBook().getId(),
+				history.getBook().getTitle(),
 				history.getComment(),
 				history.getCreatedAt());
 	}

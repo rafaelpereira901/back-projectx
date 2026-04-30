@@ -82,7 +82,9 @@ public class ReviewService {
 		return new ReviewResponse(
 				review.getId(),
 				review.getUserProfile().getId(),
+				review.getUserProfile().getFullName(),
 				review.getBook().getId(),
+				review.getBook().getTitle(),
 				review.getRating(),
 				review.getComment(),
 				review.getCreatedAt(),

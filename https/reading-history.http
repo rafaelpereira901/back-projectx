@@ -19,3 +19,11 @@ Accept: application/json
 ### Get reading histories by profile and book (public)
 GET {{baseUrl}}/profiles/{{profileId}}/books/{{bookId}}/reading-histories
 Accept: application/json
+
+### Get reading histories by book (public)
+GET {{baseUrl}}/books/{{bookId}}/reading-histories
+Accept: application/json
+
+### Get latest reading history by book (public)
+GET {{baseUrl}}/books/{{bookId}}/reading-histories/latest
+Accept: application/json

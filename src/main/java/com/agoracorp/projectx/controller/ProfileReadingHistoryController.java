@@ -49,4 +49,5 @@ public class ProfileReadingHistoryController {
 			@PathVariable Long bookId) {
 		return new ResponseEntity<>(readingHistoryService.getByProfileAndBook(profileId, bookId), HttpStatus.OK);
 	}
+
 }
