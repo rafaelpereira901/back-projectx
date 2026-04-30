@@ -1,5 +1,7 @@
 package com.agoracorp.projectx.model;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,6 +18,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "user_profiles")
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
