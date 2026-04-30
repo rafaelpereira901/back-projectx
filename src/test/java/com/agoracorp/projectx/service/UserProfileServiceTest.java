@@ -30,12 +30,14 @@ class UserProfileServiceTest {
 	private UserAccountRepository userAccountRepository;
 	@Mock
 	private UserProfileRepository userProfileRepository;
+	@Mock
+	private CloudinaryService cloudinaryService;
 
 	private UserProfileService userProfileService;
 
 	@BeforeEach
 	void setUp() {
-		userProfileService = new UserProfileService(userAccountRepository, userProfileRepository);
+		userProfileService = new UserProfileService(userAccountRepository, userProfileRepository, cloudinaryService);
 	}
 
 	@Test
@@ -75,7 +77,7 @@ class UserProfileServiceTest {
 		when(userAccountRepository.findById(1L)).thenReturn(Optional.of(user));
 		when(userProfileRepository.findByUserId(1L)).thenReturn(Optional.of(profile));
 
-		userProfileService.deleteProfileByUserId(1L, principal);
+		userProfileService.deleteProfileByUserId(1L, principal, "Não uso mais o app");
 
 		verify(userProfileRepository).delete(profile);
 	}
