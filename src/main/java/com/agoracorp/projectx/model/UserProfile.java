@@ -32,6 +32,12 @@ public class UserProfile {
 	@Column(length = 1000)
 	private String bio;
 
+	@Column(length = 512)
+	private String avatarUrl;
+
+	@Column(length = 512)
+	private String coverUrl;
+
 	@OneToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false, unique = true)
 	private UserAccount user;
